@@ -3,7 +3,6 @@ import hmac
 import json
 import random
 import string
-import time
 from collections import OrderedDict
 from typing import Any, Dict
 from urllib.parse import urlencode
@@ -63,7 +62,7 @@ class XeggexAuth(AuthBase):
         return payload
 
     def header_for_authentication(self, data: str) -> Dict[str, str]:
-        timestamp = int(time.time() * 1000)
+        timestamp =  int(self.time_provider.time() * 1e4)
         message_to_sign = f"{self.api_key}{data}{timestamp}"
         signature = self._generate_signature(message_to_sign)
         return {"X-API-KEY": self.api_key,
